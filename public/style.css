@@ -23,6 +23,7 @@
     flex-grow: 1;
     margin-left: 5%;
     margin-right: 5%;
+    border: thick solid rgba(255, 255, 255, 0);
 }
 
 .parameter > img:hover{
@@ -65,27 +66,48 @@
 
 
 
-#parameterId{
+#parameterId, #editProfileWindow{
     background-color: green;
     position:fixed;
     margin: auto;
     top: 0;
     margin-top: 5%;
     padding: 1%;
-    height: 80%;
+    max-height: 70vh;
+    max-width: 10vw;
+    display: flex;
+    flex-direction: column;
+}
+
+#editProfileWindow{
+    right: 0;
 }
 
 #parameterId > textarea{
     resize: none;
+    margin-bottom: 10%;
 }
 
-#parameterProfileList{
-    background-color: red;
+#parameterProfileList, #profileList{
     overflow-y: auto;
     height: 100%;
 }
 
-#parameterId > #parameterProfileList > img{
-    width: 100%;
+#parameterId > #parameterProfileList > img, #editProfileWindow > #profileList > img{
     display: flex;
+    margin-top: 5%;
+    margin-bottom: 5%;
+    background-color: purple;
+    box-sizing: border-box;
+    max-width: 100%;
+    padding: 10%;
+    overflow-x: hidden;
+}
+
+.profile:hover{
+    cursor: pointer;
+}
+
+#saveParameter{
+    margin-top: 10%;
 }
