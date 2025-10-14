@@ -1,3 +1,8 @@
+:root{
+    --foreground-color: rgb(109, 93, 255); 
+    --background-color: rgb(160, 160, 255);
+}
+
 *{
     padding: 0;
     margin: 0;
@@ -6,13 +11,13 @@
 .card{
     width: 30%;
     margin: auto;
-    margin-top: 5%;
-    background-color: rgb(160, 160, 255);
+    margin-top: 1%;
+    background-color: var(--background-color);
     padding: 1%;
 }
 
 .parameter-bar{
-    background-color: rgb(109, 93, 255);
+    background-color: var(--foreground-color);
     padding: 1%;
     display: flex;
 }
@@ -62,12 +67,53 @@
     text-align: center;
 }
 
+.saveCard{
+    display: block;
+    margin-top: 5%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+
+
+.dropdown{
+    display: flex;
+    flex-direction: row;
+    width: 40%;
+    height: 10vh;
+    background-color: var(--background-color);
+    align-items: center;
+    margin: auto;
+    overflow-x: scroll;
+    padding: 3vh;
+}
+
+#addCard{
+    height: 10vh;
+}
+
+#addCard:hover{
+    cursor: pointer;
+}
+
+.cardButton{
+    background-color: var(--foreground-color);
+    margin-left: 1%;
+    padding: 1%;
+}
+
+.cardButton > img{
+    display: block;
+    height: 10vh;
+    padding-bottom: 1%;
+    padding-top: 1%;
+}
 
 
 
 
 #parameterId, #editProfileWindow{
-    background-color: green;
+    background-color: var(--background-color);
     position:fixed;
     margin: auto;
     top: 0;
@@ -97,14 +143,14 @@
     display: flex;
     margin-top: 5%;
     margin-bottom: 5%;
-    background-color: purple;
+    background-color: var(--foreground-color);
     box-sizing: border-box;
     max-width: 100%;
     padding: 10%;
     overflow-x: hidden;
 }
 
-.profile:hover{
+.profile:hover, .clickable:hover{
     cursor: pointer;
 }
 
