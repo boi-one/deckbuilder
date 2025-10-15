@@ -1,9 +1,10 @@
 import { Card, Parameter, deck, selectedCard, SetSelectedCard, FindCard } from './Card.js';
 
 const parameters = document.querySelectorAll('.parameter');
+const description = document.querySelector('.description').children[1];
 const profile = document.querySelector('.profile');
+const name = document.querySelector('.name').children[1];
 const saveCard = document.querySelector('.saveCard');
-const cardsDeck = document.querySelector('.dropdown');
 const addCard = document.querySelector('#addCard');
 let editParameter = true;
 let editProfile = true;
@@ -12,6 +13,7 @@ let icons = [];
 let profiles = [];
 let lastClickedParameterId;
 let currentParameter = null;
+let selectedCardIcon = null;
 
 parameters.forEach(par => {
     par.addEventListener('click', (e) => {
@@ -24,27 +26,43 @@ profile.addEventListener('click', (e) => {
 });
 
 saveCard.addEventListener('click', (e) => {
+    console.log(selectedCard);
+    console.log(selectedCardIcon);
+
+    UpdateCard(selectedCard, selectedCardIcon);
     //save card
 });
 
 addCard.addEventListener('click', (e) => {
     UnselectDeckCards();
+    SetDefaultCardLayout();
     SetSelectedCard(deck[CreateCard()]);
 });
 
-function UnselectDeckCards(){
+function SetDefaultCardLayout() {
+    for (let i = 0; i < parameters.length; i++) {
+        parameters[i].title = `parameter ${i + 1}`;
+        parameters[i].children[0].src = "./icons/albums.svg";
+    }
+    description.value = '';
+    profile.src = './profiles/1.png';
+    name.value = '';
+
+}
+
+function UnselectDeckCards() {
     document.querySelectorAll('.cardButton').forEach(c => {
         c.style.border = "thick solid rgba(255, 255, 255, 0)";
     });
 }
 
-function CreateCard(){
+function CreateCard() {
     const descriptionField = document.querySelector('.description').children[1];
     const descriptionValue = descriptionField > 0 ? descriptionField.value : descriptionField.placeholder;
-    
+
     const nameField = document.querySelector('.name').children[1];
     const nameValue = nameField.value.length > 0 ? nameField.value : nameField.placeholder;
-    console.log(nameValue);
+
     const card = new Card(descriptionValue, profile.src, nameValue);
     for (let i = 0; i < parameters.length; i++) {
         const temp = new Parameter(parameters[i].title, StripFilename(parameters[i].children[0].src));
@@ -58,16 +76,38 @@ function CreateCard(){
     return (deck.length - 1);
 }
 
-function StripFilename(url){
+function UpdateCard(card, cardIcon) {
+    const descriptionField = document.querySelector('.description').children[1];
+    const descriptionValue = descriptionField > 0 ? descriptionField.value : descriptionField.placeholder;
+
+    const nameField = document.querySelector('.name').children[1];
+    const nameValue = nameField.value.length > 0 ? nameField.value : nameField.placeholder;
+
+    for (let i = 0; i < parameters.length; i++) {
+        card.parameters[i].SetParameter(parameters[i].title, StripFilename(parameters[i].children[0].src));
+    }
+    card.description = descriptionValue;
+    card.profile = StripFilename(profile.src);
+    card.name = nameValue;
+
+    console.log("CARD ", card);
+
+    cardIcon.children[0].innerText = card.name;
+    cardIcon.children[1].src = `./profiles/${card.profile}`;
+    cardIcon.children[1].title = card.name;
+    console.log(cardIcon);
+}
+
+function StripFilename(url) {
     let lastSlashPos;
     let cleanFileName = "";
 
-    for(let i = 0; i < url.length; i++){
-        if(url[i] === '/'){
+    for (let i = 0; i < url.length; i++) {
+        if (url[i] === '/') {
             lastSlashPos = i;
         }
     }
-    for(let i = lastSlashPos; i < url.length; i++){
+    for (let i = lastSlashPos; i < url.length; i++) {
         cleanFileName += url[i];
     }
     return cleanFileName;
@@ -80,12 +120,12 @@ async function FetchImages() {
     profiles = imageData.profiles;
 }
 FetchImages();
+SetSelectedCard(deck[CreateCard()]);
 
-function CreateCardIcon(card){
+function CreateCardIcon(card) {
     const cardButton = document.createElement('div');
     cardButton.id = card.id;
     cardButton.className = "cardButton";
-    cardButton.style.border = "thick solid white";
     const cardTitle = document.createElement('p');
     cardTitle.innerText = card.name;
     const cardIcon = document.createElement('img');
@@ -96,22 +136,39 @@ function CreateCardIcon(card){
     const deleteCard = document.createElement('button');
     deleteCard.innerText = "Delete";
 
+    selectedCardIcon = cardButton;
+
     editCard.addEventListener('click', (e) => {
+        CloseParameterWindow();
+        CloseProfileWindow();
+        
+        selectedCardIcon = cardButton;
         UnselectDeckCards();
-        cardButton.style.border = "thick solid white";
         SetSelectedCard(FindCard(cardButton.id));
-        console.log("sc ", selectedCard);
+
+        for (let i = 0; i < parameters.length; i++) { //todo: wanneer je op edit drukt dat de card word geapplied op de grote card in het midden iykyk
+            parameters[i].children[0].src = `./profile/${card.parameters[i].Icon}`;
+            parameters[i].title = card.parameters[i].parameterTitle;
+        }
+
+        description.innerText = card.description;
+        profile.src = card.profile;
+        name.innerText = card.name;    
     });
 
     deleteCard.addEventListener('click', (e) => {
-        console.log("delete");
+        if (deck.length > 1) {
+            cardButton.remove();
+            SetSelectedCard(deck[0]);
+        }
+        window.alert("can't delete, else deck will be empty");
     });
 
     cardButton.append(cardTitle);
     cardButton.append(cardIcon);
     cardButton.append(editCard);
     cardButton.append(deleteCard);
-    
+
     addCard.insertAdjacentElement('afterend', cardButton);
 }
 
@@ -126,6 +183,11 @@ function HighlightCurrentIcon(profileList, parameterIcon) {
         const child = profileList.children[j];
         if (profileList.children[j].src === parameterIcon) child.style.border = "thick solid white";
     }
+}
+
+function CloseParameterWindow(){
+    const parameterWindow = document.getElementById('parameterId');
+    if(parameterWindow) parameterWindow.remove();
 }
 
 function ChangeIcon(parameter) {
@@ -173,7 +235,7 @@ function ChangeIcon(parameter) {
             parameter.title = parameterDescription.value;
             editParameter = true;
             parameter.style.border = "thick solid rgba(255, 255, 255, 0)";
-            document.getElementById(parameterId).remove();
+            CloseParameterWindow();
         });
 
         editParametersWindow.appendChild(parameterDescription);
@@ -202,6 +264,12 @@ function ChangeIcon(parameter) {
     }
 
     lastClickedParameterId = parameter.id;
+}
+
+function CloseProfileWindow() {
+    editProfile = true;
+    const profileWindow = document.getElementById('editProfileWindow');
+    if(profileWindow) profileWindow.remove();
 }
 
 function ChangeProfile() {
@@ -233,10 +301,8 @@ function ChangeProfile() {
         }
 
         saveParameter.addEventListener('click', (e) => {
-            editProfile = true;
-            document.getElementById(editProfileWindow).remove();
+            CloseProfileWindow();
         });
-
 
         editProfileWindow.appendChild(profileList);
         editProfileWindow.appendChild(saveParameter);
@@ -244,6 +310,6 @@ function ChangeProfile() {
         document.body.append(editProfileWindow);
     }
     else {
-        document.getElementById(editProfileWindow).remove();
+        document.getElementById('editProfileWindow').remove();
     }
 }

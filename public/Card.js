@@ -3,12 +3,22 @@ export let selectedCard;
 
 export function SetSelectedCard(card) {
     selectedCard = card;
+    FindCardIcon(card.id).style.border = "thick solid white";
 }
 
-export function FindCard(id){ //todo FIX DAT DE ID WORD GEVONDEN EN WAAR HET GEBRUIKTWORD DE SETCARD OOK WERKT JWZ
+export function FindCard(id){
     for(let i = 0; i < deck.length; i++)
     {
-        if(id === deck[i].id) return deck[i];
+        if(Number(id) === deck[i].id) return deck[i];
+    }
+    return null;
+}
+
+function FindCardIcon(id){
+    const cardIcons = document.querySelectorAll('.cardButton');
+    for(let i = 0; i < cardIcons.length; i++)
+    {
+        if(id === Number(cardIcons[i].id)) return cardIcons[i];
     }
     return null;
 }
@@ -18,6 +28,11 @@ export class Parameter{
     parameterIcon = "";
 
     constructor(title, icon){
+        this.parameterTitle = title;
+        this.parameterIcon = icon;
+    }
+
+    SetParameter(title, icon){
         this.parameterTitle = title;
         this.parameterIcon = icon;
     }
