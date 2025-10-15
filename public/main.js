@@ -142,18 +142,20 @@ function CreateCardIcon(card) {
         CloseParameterWindow();
         CloseProfileWindow();
         
+        for(let i = 0; i < parameters.length; i++) parameters[i].style.border = "thick solid rgba(255, 255, 255, 0)";
+
         selectedCardIcon = cardButton;
         UnselectDeckCards();
         SetSelectedCard(FindCard(cardButton.id));
 
-        for (let i = 0; i < parameters.length; i++) { //todo: wanneer je op edit drukt dat de card word geapplied op de grote card in het midden iykyk
-            parameters[i].children[0].src = `./profile/${card.parameters[i].Icon}`;
+        for (let i = 0; i < parameters.length; i++) { //todo: laat de grote kaart veranderen en niet invalid worden als je op edit drukt bij een van de kleine kaartjes
+            parameters[i].children[0].src = `./icons${card.parameters[i].parameterIcon}`;
             parameters[i].title = card.parameters[i].parameterTitle;
         }
 
-        description.innerText = card.description;
-        profile.src = card.profile;
-        name.innerText = card.name;    
+        description.value = card.description;
+        profile.src = `./profile${StripFilename(card.profile)}`;
+        name.value = card.name;    
     });
 
     deleteCard.addEventListener('click', (e) => {
@@ -187,7 +189,11 @@ function HighlightCurrentIcon(profileList, parameterIcon) {
 
 function CloseParameterWindow(){
     const parameterWindow = document.getElementById('parameterId');
-    if(parameterWindow) parameterWindow.remove();
+    if(parameterWindow)
+    {
+        editParameter = true;
+        parameterWindow.remove();
+    }
 }
 
 function ChangeIcon(parameter) {
@@ -274,6 +280,7 @@ function CloseProfileWindow() {
 
 function ChangeProfile() {
     if (editProfile) {
+        editProfile = false;
         const profileWindowId = 'editProfileWindow';
 
         const editProfileWindow = document.createElement('div');
@@ -310,6 +317,7 @@ function ChangeProfile() {
         document.body.append(editProfileWindow);
     }
     else {
+        editProfile = true;
         document.getElementById('editProfileWindow').remove();
     }
 }
