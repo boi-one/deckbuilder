@@ -6,6 +6,7 @@ const fs = require('fs');
 const icons = './public/icons';
 const profiles = './public/profiles';
 
+app.use(express.json());
 app.use(express.static('public'));
 
 app.get('/getImages', (req, res) => {
@@ -23,6 +24,14 @@ app.get('/getImages', (req, res) => {
     }
 
     res.send(data);
+});
+
+app.post('/save-deck', (req, res) => {
+  const json = JSON.stringify(req.body, null, 2);
+  const filename = `deck-${Date.now()}.json`;
+  res.setHeader('Content-Type', 'application/json');
+  res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
+  res.send(json);
 });
 
 app.listen(PORT, () => { console.log("server is running on port: " + PORT) });

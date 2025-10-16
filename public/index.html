@@ -1,21 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./style.css">
     <title>Deck Builder</title>
 </head>
+
 <body>
     <div class="dropdown">
         <img id="addCard" title="add card to deck" src="./icons/add-circle-sharp.svg" alt="">
     </div>
+    <div class="saveload">
+        <button id="saveDeck">save deck</button>
+        <button id="loadDeck">load deck</button>
+    </div>
     <div class="card">
         <div class="parameter-bar">
-            <div title="parameter 1" class="parameter" id="p1"><img src="./icons/albums.svg" alt=""></div>
-            <div title="parameter 2" class="parameter" id="p2"><img src="./icons/albums.svg" alt=""></div>
-            <div title="parameter 3" class="parameter" id="p3"><img src="./icons/albums.svg" alt=""></div>
-            <div title="parameter 4" class="parameter" id="p4"><img src="./icons/albums.svg" alt=""></div>
+            <div title="parameter 1" class="parameter" id="0"><img src="./icons/albums.svg" alt=""></div>
+            <div title="parameter 2" class="parameter" id="1"><img src="./icons/albums.svg" alt=""></div>
+            <div title="parameter 3" class="parameter" id="2"><img src="./icons/albums.svg" alt=""></div>
+            <div title="parameter 4" class="parameter" id="3"><img src="./icons/albums.svg" alt=""></div>
         </div>
         <div class="description">
             <p>Description:</p>
@@ -30,4 +36,5 @@
     </div>
     <script type="module" src="./main.js"></script>
 </body>
+
 </html>

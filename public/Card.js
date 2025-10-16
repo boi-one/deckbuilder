@@ -1,3 +1,5 @@
+import { StripFilename } from './main.js';
+
 export const deck = [];
 export let selectedCard;
 
@@ -26,6 +28,10 @@ function FindCardIcon(id){
 export class Parameter{
     parameterTitle = "";
     parameterIcon = "";
+    leftValueMin = 0;
+    leftValueMax = null;
+    rightValueMin = 0;
+    rightValueMax = null;
 
     constructor(title, icon){
         this.parameterTitle = title;
@@ -38,9 +44,13 @@ export class Parameter{
     }
 
     ToJson(){
-        data = {
-            parameterTitleData: this.parameterTitle,
-            parameterIconData: this.parameterIcon
+        const data = {
+            parameterTitleData: StripFilename(this.parameterTitle),
+            parameterIconData: StripFilename(this.parameterIcon),
+            leftValueMin: this.leftValueMin,
+            leftValueMax: this.leftValueMax,
+            rightValueMin: this.rightValueMin,
+            rightValueMax: this.rightValueMax
         }
         return data;
     }
@@ -61,5 +71,22 @@ export class Card{
         this.description = description;
         this.profile = profile;
         this.name = name;
+    }
+
+    ToJson(){
+        const params = [];
+        this.parameters.forEach(p => {
+            params.push(p.ToJson());
+        });
+        
+        const data = {
+            id: this.id,
+            parameters: params,
+            description: this.description,
+            profile: StripFilename(this.profile),
+            name: this.name
+        }
+
+        return data;
     }
 }

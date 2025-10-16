@@ -74,12 +74,16 @@
     margin-right: auto;
 }
 
-
+.saveload{
+    text-align: center;
+    margin: auto;
+    /* background-color: var(--background-color); */
+}
 
 .dropdown{
     display: flex;
     flex-direction: row;
-    width: 40%;
+    width: 40vw;
     height: 10vh;
     background-color: var(--background-color);
     align-items: center;
@@ -154,6 +158,19 @@
     cursor: pointer;
 }
 
+.leftRightValuesContainer{
+    display: flex;
+    margin-top: 5%;
+    width: 100%;
+}
+
+.leftRightValuesContainer > input{
+    width: 50%;
+}
+#valuesInfo{
+    
+}
+
 #saveParameter{
-    margin-top: 10%;
+    margin-top: 5%;
 }
