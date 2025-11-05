@@ -78,7 +78,7 @@ loadDeck.addEventListener('click', (e) => {
 function SetDefaultCardLayout() {
     for (let i = 0; i < parameters.length; i++) {
         parameters[i].title = `parameter ${i + 1}`;
-        parameters[i].children[0].src = "./icons/albums.svg";
+        parameters[i].children[0].src = "./icons/location.png";
     }
     description.value = '';
     profile.src = './profiles/1.png';
